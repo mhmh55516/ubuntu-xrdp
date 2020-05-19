@@ -16,6 +16,14 @@ services:
     volumes:
       - ssh:/etc/ssh/
       - /home/:/home/
+    browser:
+    build: .
+    image: fphammerle/brave-browser-x11
+    environment:
+    - DISPLAY
+    volumes:
+    - /tmp/.X11-unix:/tmp/.X11-unix
+    security_opt: [no-new-privileges]
 
 volumes:
   ssh:
