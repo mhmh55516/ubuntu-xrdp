@@ -106,6 +106,23 @@ COPY bin /usr/bin
 COPY etc /etc
 COPY autostart /etc/xdg/autostart
 
+# Brave-browser
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends \
+        ca-certificates \
+        curl \
+        gnupg2 \
+    && curl -s https://brave-browser-apt-release.s3.brave.com/brave-core.asc \
+        | apt-key --keyring /etc/apt/trusted.gpg.d/brave-browser-release.gpg add - \
+    && echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ bionic main" \
+        > /etc/apt/sources.list.d/brave-browser-release.list \
+    && useradd --create-home browser
+
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends brave-keyring brave-browser
+
+USER browser
+
 # Configure
 RUN mkdir /var/run/dbus && \
   cp /etc/X11/xrdp/xorg.conf /etc/X11 && \
